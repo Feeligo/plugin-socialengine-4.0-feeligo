@@ -27,15 +27,15 @@ class FeeligoGiftbar_Plugin_Core
    */
   private function flg_API_key() { return self::__api_key; }
   private function flg_Community_Secret() { return self::__community_secret; }
-  private function flg_HeadJsURL() { return self::__headjs_url; }
-  private function flg_SocketIoURL() { return self::__socketio_url; }
-  private function flg_appJsURL($api_key) { 
-    return self::__server_url."c/".$api_key."/apps/GiftBar.js";
-  }
-  private function flg_appCssURL($api_key, $version = null) {
+  private function flg_appCssURL($version = null) {
     $version_str = $version === null ? '' : ('-'.$version);
-    return self::__server_url."c/".$api_key."/apps/GiftBar".$version_str.".css";
+    return self::__server_url."c/".$this->flg_API_key()."/apps/giftbar".$version_str.".css";
   }
+  private function flg_appLoaderURL($user = null) {
+    $user_str = $user === null ? '' : ('-'.$user->user_id);
+    return self::__server_url."c/".$this->flg_API_key()."/apps/giftbar-loader".$user_str.".js";
+  }
+  
  
   /**
    * SocialEngine hook, injects the app's loading code and data into the page
@@ -50,18 +50,14 @@ class FeeligoGiftbar_Plugin_Core
       $headScript = new Zend_View_Helper_HeadScript();
       // add <script> tags
       $headScript
-        ->appendFile($this->flg_HeadJsURL()) // add <script> tag which loads head.js
-        ->appendScript('head.js(
-          "'.$this->flg_SocketIoURL().'",
-          "'.$this->flg_appJsURL($api_key).'",
-          '.$this->getJsStartupFunctionCode($api_key).'
-        );') // add <script> tag with call to FLG and boot data
+        ->appendScript($this->getJsStartupFunctionCode()) // add <script> tag with call to FLG and boot data
+        ->appendFile($this->flg_appLoaderURL(Engine_Api::_()->user()->getViewer())) // add <script> tag for giftbar loader
       ;
       // add links to stylesheets
       $headLink = new Zend_View_Helper_HeadLink();
       $headLink
-        ->appendStylesheet($this->flg_appCssURL($api_key), 'screen')
-        ->appendStylesheet($this->flg_appCssURL($api_key, 'ie7'), 'screen', 'lt IE 7')
+        ->appendStylesheet($this->flg_appCssURL(), 'screen')
+        ->appendStylesheet($this->flg_appCssURL('ie7'), 'screen', 'lt IE 7')
       ;
     }
     
@@ -75,8 +71,21 @@ class FeeligoGiftbar_Plugin_Core
    * @return boolean
    */
   private function shouldRender() {
+    $viewer = Engine_Api::_()->user()->getViewer();
     $identity = Engine_Api::_()->user()->getViewer()->getIdentity(); // get viewer's identity
     return !(null === $identity || 0 === $identity); // if identity is set and not null, the user is logged in : render the bar
+  }
+  
+  /**
+    * gets the subject IF AND ONLY IF
+    * - it is a user
+    */
+  private function getUserSubject() {
+    if (Engine_Api::_()->core()->hasSubject('user')) {
+      $u_subj = Engine_Api::_()->core()->getSubject('user');
+      return $u_subj;
+    }
+    return null;
   }
   
   /**
@@ -84,8 +93,9 @@ class FeeligoGiftbar_Plugin_Core
    *
    * @return string
    */
-  private function getJsStartupFunctionCode($api_key) {
-    return 'function(){__FLG("'.$api_key.'",'.json_encode($this->getStartupData()).')}';
+  private function getJsStartupFunctionCode() {
+    #return 'function(){__FLG("'.self::flg_API_key().'",'.json_encode($this->getStartupData()).')}';
+    return '(function(){if(!this.flg){this.flg={};}if(!this.flg.config){this.flg.config={};}if(!this.flg.context){this.flg.context={}};flg.config.api_key="'.$this->flg_API_key().'";flg.context='.json_encode($this->flg_getContext()).';flg.auth='.json_encode($this->flg_getAuth()).'}).call(this);';
   }
   
   /**
@@ -94,33 +104,34 @@ class FeeligoGiftbar_Plugin_Core
    *
    * @return Array
    */
-  private function getStartupData() {
-    $time = time();
+  private function flg_getContext() {
     
     // get users from SE
     $user_viewer = Engine_Api::_()->user()->getViewer();
-    $user_subject = null;
-    if (null !== $user_viewer && Engine_Api::_()->core()->hasSubject()) {
-      $u_subj = Engine_Api::_()->core()->getSubject('user');
-      // ensure that the subject and the viewer are not the same user (i.e. when viewing self's profile page)
-      if (!$u_subj->isSelf($user_viewer)) {
-        $user_subject = $u_subj;
-      }
-    }
-    
-    // add 'password' to viewer object
-    $viewer_obj = $this->userAsJsonObject($user_viewer);
-    if (is_array($viewer_obj)) {
-      $viewer_obj['password'] = sha1("user:".$this->flg_Community_Secret().":".$user_viewer->user_id.":".(intval($time/100)*100));
+    $user_subject = null;  
+    // ensure that the subject and the viewer are not the same user (i.e. when viewing self's profile page)
+    if (null !== $user_viewer && null !== ($u_subj = $this->getUserSubject()) && !$u_subj->isSelf($user_viewer)) {
+      $user_subject = $u_subj;
     }
     
     // return an array which can be json_encoded
     return array(
-      'viewer' => $viewer_obj,
+      'viewer' => $this->userAsJsonObject($user_viewer),
       'subject' => $this->userAsJsonObject($user_subject, true),
-      'friends' => $this->getFriendsObject($user_viewer, $user_subject),
-      'time' => $time
+      'friends' => $this->getFriendsObject($user_viewer, $user_subject)
     );
+  }
+  
+  /**
+   * returns authentication data
+   *
+   * @return Array
+   */
+  private function flg_getAuth() {
+    $time = time();
+    $user_viewer = Engine_Api::_()->user()->getViewer();
+    
+    return array('time' => $time, 'password' => sha1("user:".$this->flg_Community_Secret().":".$user_viewer->user_id.":".(intval($time/100)*100)));
   }
   
   /**
