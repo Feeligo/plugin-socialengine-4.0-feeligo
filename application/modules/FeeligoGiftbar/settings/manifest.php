@@ -3,7 +3,7 @@
   array (
     'type' => 'module',
     'name' => 'feeligo-giftbar',
-    'version' => '4.1.0.1.0',
+    'version' => '4.1.0.1.1beta',
     'path' => 'application/modules/FeeligoGiftbar',
     'title' => 'Feeligo GiftBar',
     'description' => 'Monetize and Engage your community by allowing your members to send virtual gifts to each other!',
