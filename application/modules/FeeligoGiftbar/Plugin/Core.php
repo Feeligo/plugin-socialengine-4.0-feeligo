@@ -18,9 +18,6 @@ class FeeligoGiftbar_Plugin_Core
   const __api_key = FLG__community_api_key;
   const __community_secret = FLG__community_secret;
   const __server_url = FLG__server_url;
-
-  const __headjs_url = FLG__headjs_url;
-  const __socketio_url = FLG__socketio_url;
   
   /**
    * Accessors for Feeligo params
