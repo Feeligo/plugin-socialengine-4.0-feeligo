@@ -115,7 +115,7 @@ class FeeligoGiftbar_Plugin_Core
     return array(
       'viewer' => $this->userAsJsonObject($user_viewer),
       'subject' => $this->userAsJsonObject($user_subject, true),
-      'friends' => $this->getFriendsObject($user_viewer, $user_subject)
+      'users' => $this->allUsersAsJsonObject($user_viewer, $user_subject)
     );
   }
   
@@ -154,39 +154,35 @@ class FeeligoGiftbar_Plugin_Core
   
   
   /**
+   * returns all viewer's friend and all subject's friends as JSON objects
    * returns an array of arrays, each of the same type returned by userAsJsonObject above
    *
    * @param User_Model_User $user_viewer
    * @param User_Model_User $subject or null
    * @return array
    */
-  private function getFriendsObject($user_viewer, $user_subject = null) {
-    //TEMP
-    //return array();
+  private function allUsersAsJsonObject($user_viewer, $user_subject = null) {
     
-    $viewers_friends_ids = $this->getIdsOfFriends($user_viewer);
-    $subjects_friends_ids = $this->getIdsOfFriends($user_subject);
+    $all_users_json_obj = array();
     
-    // intersection of two previous lists
-    $common_friends_ids = array_unique(array_merge($viewers_friends_ids, $subjects_friends_ids));
+    // friends of the viewer
+    foreach($user_viewer->membership()->getMembers($user_viewer) as $row) {
+      // add all friends of the viewer to the list. They are all allowed to receive gifts from the viewer.
+      $all_users_json_obj[] = $this->userAsJsonObject($row, true);
+    }
     
-    // array of common friends to be returned
-    $common_friends_obj = array();
-    
-    // get a RowSet of user records with the ID's of common friends
-    $common_friends_users = $user_viewer->getTable()->find($common_friends_ids);
-    
-    // iterate over the rowset. each row is cast to a User_Model_User instance, which can be passed to $this->userAsJsonObject
-    if ($common_friends_users->count() > 0) {
-      foreach($common_friends_users as $user) {
-        $user_json = $this->userAsJsonObject($user, in_array($user->user_id, $viewers_friends_ids));
-        if (null !== $user_json && is_array($user_json)) {
-          $common_friends_obj[] = $user_json;
+    // friends of the subject
+    if (null !== $user_subject) {
+      foreach($user_subject->membership()->getMembers($user_subject) as $row) {
+        // if the $row user is friends with the viewer, it has already been added
+        // if it is NOT friends with the viewer, and is NOT the viewer itself, add it (but can receive no gifts)
+        if (!$user_viewer->membership()->isMember($row, $user_viewer, true) && !$user_viewer->isSelf($row)) {
+          $all_users_json_obj[] = $this->userAsJsonObject($row, false);
         }
       }
     }
-    
-    return $common_friends_obj;
+
+    return $all_users_json_obj;
   }
   
   /**
