@@ -115,7 +115,7 @@ class FeeligoGiftbar_Plugin_Core
     return array(
       'viewer' => $this->userAsJsonObject($user_viewer),
       'subject' => $this->userAsJsonObject($user_subject, true),
-      'users' => $this->allUsersAsJsonObject($user_viewer, $user_subject)
+      'users' => $this->friendsAsJsonObject($user_viewer, $user_subject)
     );
   }
   
@@ -161,7 +161,7 @@ class FeeligoGiftbar_Plugin_Core
    * @param User_Model_User $subject or null
    * @return array
    */
-  private function allUsersAsJsonObject($user_viewer, $user_subject = null) {
+  private function friendsAsJsonObject($user_viewer, $user_subject = null) {
     
     $all_users_json_obj = array();
     
@@ -184,28 +184,5 @@ class FeeligoGiftbar_Plugin_Core
 
     return $all_users_json_obj;
   }
-  
-  /**
-   * returns an array with the IDs of $user's friends
-   *
-   * @param User_Model_User $user
-   * @return array
-   */
-  private function getIdsOfFriends($user) {
-    $friend_ids = array();
-    if ($user && $user->membership()) {
-      /*$friends_resources = $user->membership()->getMembersOfSelect()->query()->fetchAll();
-      for ($i=0; $i<sizeof($friends_resources); $i++) {
-        $friend_ids[] = $friends_resources[$i]['resource_id'];
-      }*/
-      foreach( $user->membership()->getMembersInfo($user, true) as $row )
-      {
-        $friend_ids[] = $row->user_id;
-      }
-      //return Engine_Api::_()->getItemTable('user')->find($ids);
-    }
-    return $friend_ids;
-  }
-  
 
 }
