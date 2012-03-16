@@ -91,7 +91,6 @@ class FeeligoGiftbar_Plugin_Core
    * @return string
    */
   private function getJsStartupFunctionCode() {
-    #return 'function(){__FLG("'.self::flg_API_key().'",'.json_encode($this->getStartupData()).')}';
     return '(function(){if(!this.flg){this.flg={};}if(!this.flg.config){this.flg.config={};}if(!this.flg.context){this.flg.context={}};flg.config.api_key="'.$this->flg_API_key().'";flg.context='.json_encode($this->flg_getContext()).';flg.auth='.json_encode($this->flg_getAuth()).'}).call(this);';
   }
   
@@ -143,7 +142,6 @@ class FeeligoGiftbar_Plugin_Core
       return array(
         'id' => $user->user_id,
         'name' => $user->displayname,
-        'email' => isset($user->email) ? $user->email : null,
         'index_url' => $user->getHref(),
         'image_url' => $user->getPhotoUrl('thumb.icon'),
         'crgfv' => $can_receive_gifts_from_viewer
