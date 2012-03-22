@@ -48,7 +48,7 @@ class FeeligoGiftbar_Plugin_Core
       // add <script> tags
       $headScript
         ->appendScript($this->getJsStartupFunctionCode()) // add <script> tag with call to FLG and boot data
-        ->appendFile($this->flg_appLoaderURL(Engine_Api::_()->user()->getViewer())) // add <script> tag for giftbar loader
+      //  ->appendFile($this->flg_appLoaderURL(Engine_Api::_()->user()->getViewer())) // add <script> tag for giftbar loader
       ;
       // add links to stylesheets
       $headLink = new Zend_View_Helper_HeadLink();

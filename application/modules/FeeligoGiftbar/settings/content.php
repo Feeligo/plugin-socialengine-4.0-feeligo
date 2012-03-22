@@ -17,5 +17,5 @@ return array(
     'type' => 'widget',
     'name' => 'feeligo-giftbar.placeholder',
    
-  )
-);
+  ),
+) ?>
