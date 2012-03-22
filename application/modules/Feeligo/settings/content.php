@@ -11,11 +11,11 @@
  */
 return array(
   array(
-    'title' => 'Feeligo GiftBar',
-    'description' => 'Add to your Global Footer to show the Giftbar there.',
+    'title' => 'Feeligo Gift Bar',
+    'description' => 'Add to your Global Footer to show the Gift Bar.',
     'category' => 'Feeligo',
     'type' => 'widget',
-    'name' => 'feeligo-giftbar.placeholder',
+    'name' => 'feeligo.giftbar',
    
   ),
 ) ?>

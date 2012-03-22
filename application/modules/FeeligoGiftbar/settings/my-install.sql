@@ -1,1 +1,0 @@
-INSERT IGNORE INTO `engine4_core_modules` (`name`, `title`, `description`, `version`, `enabled`, `type`) VALUES  ('feeligo-giftbar', 'Feeligo GiftBar', 'Monetize and Engage your community by allowing your members to send virtual gifts to each other!', '4.1.6', 1, 'extra') ;

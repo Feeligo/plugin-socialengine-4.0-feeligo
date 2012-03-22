@@ -2,10 +2,10 @@
   'package' => 
   array (
     'type' => 'module',
-    'name' => 'feeligo-giftbar',
-    'version' => '4.1.0.1.1beta2',
-    'path' => 'application/modules/FeeligoGiftbar',
-    'title' => 'Feeligo GiftBar',
+    'name' => 'feeligo',
+    'version' => '4.1.0.1.1beta3',
+    'path' => 'application/modules/Feeligo',
+    'title' => 'Feeligo',
     'description' => 'Monetize and Engage your community by allowing your members to send virtual gifts to each other!',
     'author' => 'Feeligo',
     'callback' => 
@@ -23,18 +23,18 @@
     ),
     'directories' => 
     array (
-      0 => 'application/modules/FeeligoGiftbar',
+      0 => 'application/modules/Feeligo',
     ),
     'files' => 
     array (
-      0 => 'application/languages/en/feeligo-giftbar.csv',
+      //0 => 'application/languages/en/feeligo.csv',
     ),
   ),
   // Hooks ---------------------------------------------------------------------
   'hooks' => array(
     array(
       'event' => 'onRenderLayoutDefault',
-      'resource' => 'FeeligoGiftbar_Plugin_Core'
+      'resource' => 'Feeligo_Plugin_Core'
     )
   ),
   // Items ---------------------------------------------------------------------
