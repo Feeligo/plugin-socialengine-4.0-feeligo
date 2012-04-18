@@ -1,0 +1,3 @@
+[submodule "application/modules/Feeligo/Common"]
+	path = application/modules/Feeligo/Common
+	url = git@github.com:davb/flgsdkphp.git

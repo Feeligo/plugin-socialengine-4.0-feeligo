@@ -42,6 +42,15 @@
   ),
   // Routes --------------------------------------------------------------------
   'routes' => array(
-    
+    // User - Specific
+    'feeligo_api' => array(
+      'route' => 'feeligo/api',
+      
+      'defaults' => array(
+        'module' => 'feeligo',
+        'controller' => 'api',
+        'action' => 'index'
+      )
+    ),
   )
 ); ?>
