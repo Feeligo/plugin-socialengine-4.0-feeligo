@@ -20,10 +20,9 @@ require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/en
  
 class Feeligo_Model_Adapter_User extends FeeligoAdapterUser {
  
-  public function __construct($se_user, $crgfv = null) {
-    parent::__construct($se_user->user_id);
+  public function __construct($se_user) {
+    parent::__construct(isset($se_user->user_id) ? $se_user->user_id : 0);
     $this->user = $se_user;
-    $this->crgfv = $crgfv;
   }
   
   public function user() {
@@ -55,16 +54,6 @@ class Feeligo_Model_Adapter_User extends FeeligoAdapterUser {
   public function link() {
     return $this->user()->getHref();
   }
-  
-  public function crgfv() {
-    return $this->crgfv;
-  }
-
-  public function as_json() {
-    return array_merge(parent::as_json(), array(
-      'crgfv' => $this->crgfv()
-    ));
-  } 
   
   public function selector_friends() {
     /*$col = new FeeligoEntityElementCollectionSet('user');

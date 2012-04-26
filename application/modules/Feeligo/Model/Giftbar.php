@@ -70,8 +70,8 @@ class Feeligo_Model_Giftbar {
    * @return bool
    */
   public function should_be_displayed() {
-    $identity = $this->api()->adapter_viewer()->user()->getIdentity();
-    return $identity !== null && $identity > 0;
+    $identity = Engine_Api::_()->user()->getViewer()->getIdentity();
+    return $identity !== null && $identity != 0;
   }
   
   /**

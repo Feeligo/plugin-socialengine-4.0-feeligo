@@ -39,6 +39,12 @@ class Feeligo_Model_Adapter_Users implements FeeligoSelectorUsers {
   
   public function find($id, $throw = true) {
     if (($user = $this->_api->getUser($id)) !== null && $user->getIdentity() == $id) {
+      // check whether the user actually exists in the database
+      if (!isset($user->user_id)) {
+        if ($throw) throw new FeeligoEntityNotFoundException('type', 'could not find '.'user'.' with id='.$id);
+        return null;
+      }
+      // the user exists : return it
       return new Feeligo_Model_Adapter_User($user, null, $this);
     }
     if ($throw) throw new FeeligoEntityNotFoundException('type', 'could not find '.'user'.' with id='.$id);

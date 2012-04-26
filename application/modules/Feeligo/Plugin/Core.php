@@ -22,7 +22,6 @@ class Feeligo_Plugin_Core
   {
     $giftbar = new Feeligo_Model_Giftbar();
     
-    
     if ($giftbar->should_be_displayed()) {
 
       $headScript = new Zend_View_Helper_HeadScript();
