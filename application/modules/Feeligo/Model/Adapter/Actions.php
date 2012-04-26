@@ -16,11 +16,11 @@
  * @license    
  */
 
-require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/actions.php'); 
+require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/selector/actions.php'); 
 require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/entity/element/collection/set.php');
 require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/entity/not_found_exception.php');
  
-class Feeligo_Model_Adapter_Actions implements FeeligoActions {
+class Feeligo_Model_Adapter_Actions implements FeeligoSelectorActions {
  
   public function __construct($table = null, $select = null) {
     $this->_table = $table !== null ? $table : Engine_Api::_()->getItemTable('user');

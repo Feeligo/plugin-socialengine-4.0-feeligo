@@ -15,14 +15,13 @@
  * @copyright  Copyright 2012 Feeligo
  * @license    
  */
-require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/user.php');
+require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/adapter/user.php');
 require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/entity/element/collection/set.php');
  
-class Feeligo_Model_Adapter_User extends FeeligoUser {
+class Feeligo_Model_Adapter_User extends FeeligoAdapterUser {
  
   public function __construct($se_user, $crgfv = null) {
     parent::__construct($se_user->user_id);
-    $this->parent = $parent;
     $this->user = $se_user;
     $this->crgfv = $crgfv;
   }
@@ -67,12 +66,13 @@ class Feeligo_Model_Adapter_User extends FeeligoUser {
     ));
   } 
   
-  public function friends() {
-    $col = new FeeligoEntityElementCollectionSet('user');
+  public function selector_friends() {
+    /*$col = new FeeligoEntityElementCollectionSet('user');
     foreach($this->user()->membership()->getMembers($this->user()) as $friend) {
       $col->add(new Feeligo_Model_Adapter_User($friend, null));
     }
-    return $col;
+    return $col;*/
+    return new Feeligo_Model_Adapter_UserFriends($this);
   }
   
   public function picture_url() {

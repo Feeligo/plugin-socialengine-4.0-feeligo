@@ -24,11 +24,12 @@ class Feeligo_ApiController extends Core_Controller_Action_Standard {
     $flg_response = $flg_ctrl->run();
 
     $r = $this->getResponse();
+    $r->clearBody();
     $r->setHttpResponseCode($flg_response->code());
     foreach($flg_response->headers() as $k => $v) {
       $r->setHeader($k, $v, true);
     }
-    $r->appendBody($flg_response->body());
+    $r->setBody($flg_response->body());
   }
 
 }

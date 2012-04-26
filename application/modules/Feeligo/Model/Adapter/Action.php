@@ -15,9 +15,9 @@
  * @copyright  Copyright 2012 Feeligo
  * @license    
  */
-require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/action.php');
+require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/user/action.php');
  
-class Feeligo_Model_Adapter_Action extends FeeligoAction {
+class Feeligo_Model_Adapter_Action extends FeeligoAdapterAction {
  
   public function __construct($se_action) {
   }
