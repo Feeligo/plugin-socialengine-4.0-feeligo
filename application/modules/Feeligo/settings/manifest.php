@@ -3,7 +3,7 @@
   array (
     'type' => 'module',
     'name' => 'feeligo',
-    'version' => '4.1.0.1.2',
+    'version' => '4.1.0.1.4',
     'path' => 'application/modules/Feeligo',
     'title' => 'Feeligo',
     'description' => 'Monetize and Engage your community by allowing your members to send virtual gifts to each other!',

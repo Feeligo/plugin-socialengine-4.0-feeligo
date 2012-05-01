@@ -25,7 +25,7 @@ class Feeligo_Model_Community extends FeeligoCommunity {
    */
   public function users() {
     if (!isset($this->_users)) {
-      $this->_users = new Feeligo_Model_Adapter_Users();
+      $this->_users = new Feeligo_Model_Selector_Users();
     }
     return $this->_users;
   }
@@ -35,7 +35,7 @@ class Feeligo_Model_Community extends FeeligoCommunity {
    */
   public function actions() {
     if (!isset($this->_actions)) {
-      $this->_actions = new Feeligo_Model_Adapter_Actions();
+      $this->_actions = new Feeligo_Model_Selector_Actions();
     }
     return $this->_actions;
   }

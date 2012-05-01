@@ -56,12 +56,7 @@ class Feeligo_Model_Adapter_User extends FeeligoAdapterUser {
   }
   
   public function selector_friends() {
-    /*$col = new FeeligoEntityElementCollectionSet('user');
-    foreach($this->user()->membership()->getMembers($this->user()) as $friend) {
-      $col->add(new Feeligo_Model_Adapter_User($friend, null));
-    }
-    return $col;*/
-    return new Feeligo_Model_Adapter_UserFriends($this);
+    return new Feeligo_Model_Selector_UserFriends($this);
   }
   
   public function picture_url() {

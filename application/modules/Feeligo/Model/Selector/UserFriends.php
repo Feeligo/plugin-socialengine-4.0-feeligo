@@ -16,7 +16,7 @@
  * @license    
  */
  
-class Feeligo_Model_Adapter_UserFriends extends Feeligo_Model_Adapter_Users {
+class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users {
  
   public function __construct($adapter_user, $table = null, $select = null) {
     parent::__construct($table, $select);
