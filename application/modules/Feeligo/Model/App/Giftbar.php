@@ -16,17 +16,16 @@
  * @license    
  */
 
-require_once(str_replace('//','/',dirname(__FILE__).'/').'../Common/apps/giftbar.php');  
+require_once(str_replace('//','/',dirname(__FILE__).'/').'../../sdk/apps/giftbar.php');  
  
-class Feeligo_Model_Giftbar extends FeeligoAppGiftbar {
+class Feeligo_Model_App_Giftbar extends FeeligoGiftbarApp {
   
   /**
-   * Accessor for the API object
-   *
-   * @return FeeligoApi
+   * constructor
+   * passes an instance of Feeligo_Api_Feeligo
    */
-  public function api() {
-    return Feeligo_Api_Feeligo::_();
+  function __construct() {
+    parent::__construct(Feeligo_Api_Feeligo::_());
   }
   
 }

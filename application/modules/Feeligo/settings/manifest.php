@@ -3,7 +3,7 @@
   array (
     'type' => 'module',
     'name' => 'feeligo',
-    'version' => '4.1.0.1.4',
+    'version' => '4.1.0.2.0',
     'path' => 'application/modules/Feeligo',
     'title' => 'Feeligo',
     'description' => 'Monetize and Engage your community by allowing your members to send virtual gifts to each other!',
@@ -27,7 +27,8 @@
     ),
     'files' => 
     array (
-      //0 => 'application/languages/en/feeligo.csv',
+      'application/languages/en/feeligo.csv',
+      'application/languages/fr/feeligo.csv',
     ),
   ),
   // Hooks ---------------------------------------------------------------------

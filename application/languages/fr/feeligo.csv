@@ -1,0 +1,1 @@
+"{item:$subject} sent {body:$body} to {item:$object}";"{item:$subject} a offert {body:$body} à {item:$object}"

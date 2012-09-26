@@ -80,7 +80,7 @@ class Feeligo_Model_Adapter_ActionMessage {
       $item_id = $this->_arg_prop($arg, 'id', $item_id);
     }
     if ($value !== null) {
-      return $value = "<flg origin='action' action='$action_name' item-type='$item_type' item-id='$item_id'>$value</flg>";
+      return $value = "<a data-flg-role='link' data-flg-type='$item_type' data-flg-origin='action' data-flg-id='$item_id'>$value</flg>";
     }
   }
   

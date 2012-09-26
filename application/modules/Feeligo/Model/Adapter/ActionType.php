@@ -51,7 +51,6 @@ class Feeligo_Model_Adapter_ActionType {
   }
   
   public static function build($data, $message) {
-    var_dump("building AT");
     // build a ActionType adapter
     $row = self::table()->createRow();
     $row->setFromArray(array(

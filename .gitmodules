@@ -1,3 +1,6 @@
 [submodule "application/modules/Feeligo/Common"]
 	path = application/modules/Feeligo/Common
 	url = git@github.com:davb/flgsdkphp.git
+[submodule "application/modules/Feeligo/sdk"]
+	path = application/modules/Feeligo/sdk
+	url = git@github.com:Feeligo/connector-sdk-php.git

@@ -15,12 +15,12 @@
  * @copyright  Copyright 2012 Feeligo
  * @license    
  */
-require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/adapter/action.php');
+require_once(str_replace('//','/',dirname(__FILE__).'/').'../../sdk/interfaces/action_adapter.php');
  
-class Feeligo_Model_Adapter_Action extends FeeligoAdapterAction {
+ 
+class Feeligo_Model_Adapter_Action implements FeeligoActionAdapter {
  
   public function __construct($se_action) {
-    parent::__construct($se_action, isset($se_action->action_id) ? $se_action->action_id : 0);
     $this->_adaptee = $se_action;
   }
   
