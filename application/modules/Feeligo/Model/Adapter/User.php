@@ -21,12 +21,7 @@ require_once(str_replace('//','/',dirname(__FILE__).'/').'../../Common/models/en
 class Feeligo_Model_Adapter_User extends FeeligoAdapterUser {
  
   public function __construct($se_user) {
-    parent::__construct(isset($se_user->user_id) ? $se_user->user_id : 0);
-    $this->user = $se_user;
-  }
-  
-  public function user() {
-    return $this->user;
+    parent::__construct($se_user, isset($se_user->user_id) ? $se_user->user_id : 0);
   }
   
   /**
