@@ -26,8 +26,7 @@ class Feeligo_Api_Feeligo extends FeeligoApi {
    * @return bool
    */
   public function has_viewer() {
-    $identity = Engine_Api::_()->user()->getViewer()->getIdentity();
-    return $identity !== null && $identity != 0;
+    return $this->viewer() !== null;
   }
 
   /**
@@ -36,7 +35,7 @@ class Feeligo_Api_Feeligo extends FeeligoApi {
    * @return bool
    */    
   public function viewer() {
-    if (!isset($this->_adapter_viewer)) {
+    if (!isset($this->_adapter_viewer) && ($id = Engine_Api::_()->user()->getViewer()->getIdentity()) !== null && $id != 0) {
       $this->_adapter_viewer = new Feeligo_Model_Adapter_User(Engine_Api::_()->user()->getViewer());
     }
     return $this->_adapter_viewer;
@@ -49,7 +48,7 @@ class Feeligo_Api_Feeligo extends FeeligoApi {
    * @return bool
    */
   public function has_subject() {
-    return Engine_Api::_()->core()->hasSubject('user');
+    return $this->subject() !== null;
   }
 
   /**
