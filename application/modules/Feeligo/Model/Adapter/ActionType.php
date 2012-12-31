@@ -35,36 +35,36 @@ class Feeligo_Model_Adapter_ActionType {
     return Engine_Api::_()->getDbtable('actionTypes', 'activity');
   }
   
-  public static function find_or_create($data, $message) {
-    $at = self::table()->getActionType('flg_'.$data['name']);
+  public static function find_or_create($data) {
+    $at = self::table()->getActionType('flg_'.$data->name());
     if ($at !== null) {
       return new self($at);
     }
-    return self::create($data, $message);
+    return self::create($data);
   }
   
-  public static function create($data, $message) {
-    $adapter = self::build($data, $message);
+  public static function create($data) {
+    $adapter = self::build($data);
     if ($adapter !== null && $adapter->save()) {
       return $adapter;
     }
   }
   
-  public static function build($data, $message) {
+  public static function build($data) {
     // build a ActionType adapter
     $row = self::table()->createRow();
     $row->setFromArray(array(
-      'type' => 'flg_' . $data['name'],
+      'type' => 'flg_' . $data->name(),
       'module' => 'feeligo',
-      'body' => $message->action_type_body(),
+      'body' => $data->action_type_body(),
       'enabled' => true,
       'displayable' => 5, //TODO
-      'attachable' => isset($data['attachable']) ? !!$data['attachable'] : true,
-      'commentable' => isset($data['commentable']) ? !!$data['commentable'] : true,
-      'shareable' => isset($data['shareable']) ? !!$data['shareable'] : true,
+      'attachable' => true,
+      'commentable' => true,
+      'shareable' => true,
       'is_generated' => true
     ));
-    return new self($row, $message);
+    return new self($row);
   }
   
   
