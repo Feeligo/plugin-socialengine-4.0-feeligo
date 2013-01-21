@@ -1,6 +1,5 @@
 *
 !.gitignore
 !README.md
-!application/languages/en/feeligo.csv
-!application/languages/fr/feeligo.csv
+!application/languages/*/feeligo.csv
 !application/modules/Feeligo
