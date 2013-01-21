@@ -29,7 +29,10 @@ If you are downloading and installing the plugin for development purposes, you c
   3. clone the repository inside the root directory of your SocialEngine 4 site, 
 
         cd YOUR_SITE_ROOT
-        git clone git@github.com:Feeligo/feeligo/plugin-socialengine-4.0-feeligo.git .
+        git clone --no-checkout git@github.com:Feeligo/plugin-socialengine-4.0-feeligo.git ./application.tmp
+        mv ./application.tmp/.git .
+        rmdir ./application.tmp
+        git reset --hard HEAD
         git submodule update --init
 
   4. add the lines below at the top of your main `index.php` file. This allows to set up the plugin with your API credentials, without hardcoding them into the plugin.
