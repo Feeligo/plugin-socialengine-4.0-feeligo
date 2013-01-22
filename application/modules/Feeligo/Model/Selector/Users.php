@@ -37,7 +37,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
   public function __construct($table = null, $select = null) {
     $this->_table = $table !== null ? $table : Engine_Api::_()->getItemTable('user');
     $this->_select = $select !== null ? $select : $this->table()->select();
-    
+
     $this->_api = Engine_Api::_()->getItemApi('user'); // User_Api_Core
   }
   
@@ -111,6 +111,10 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
    * @return FeeligoUserAdapter[] array
    */ 
   public function search($query, $limit = null, $offset = 0) {
+    $this->search_by_name($query, $limit, $offset);
+  }
+
+  public function search_by_name($query, $limit = null, $offset = 0) {
     // Searchable users only
     $select = $this->select()->where('search = ?', 1);
     // WHERE clause for search
@@ -121,6 +125,34 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
   
+  public function search_by_birth_date($bd, $limit = null, $offset = 0) {
+    // format date from yyyy-mm-dd to (yyy)y-(m)m-(d)d
+    list($year, $month, $day) = preg_split('/[\/.-]/', $bd);
+    if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
+    if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
+    if ( intval($year) == 0 ) $year = '0';
+
+    // select from engine4_users to get users
+    $select = $this->select()->distinct();
+    
+    // join with engine4_user_fields_values to get birthdate
+    $select->join(array('fields' => 'engine4_user_fields_values'),
+      //'`'.$this->table()->info('name').'`.`user_id` = fields.item_id',
+      '',
+      array());
+
+    $select->where('engine4_users.user_id = fields.item_id') // join condition
+    ->where('search = ?', 1) // searchable users only
+    ->where('fields.field_id = 6') // has birthdate field
+    ->where("fields.value = '".$year."-".$month."-".$day."'") // birthdate value
+    ->order("displayname");
+
+    // pagination
+    if ($limit !== null) $select->limit($limit, $offset);
+    // retrieve data
+    var_dump((string) $select);
+    return $this->_collect_users($select->getTable()->fetchAll($select));
+  }
   
   /**
    * helper method to wrap each element of a list of User_Model_User

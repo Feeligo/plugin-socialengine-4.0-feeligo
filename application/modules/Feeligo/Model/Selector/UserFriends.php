@@ -91,9 +91,36 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
    * @return Feeligo_Model_Adapter_User[] array
    */  
   public function search($query, $limit = null, $offset = 0) {
+    $this->search_by_name($query, $limit, $offset);
+  }
+
+  public function search_by_name($query, $limit = null, $offset = 0) {
     $where = '`'.$this->table()->info('name').'`.`displayname` LIKE ?';
     $arg = '%'. $query .'%';
     return $this->_all_where($where, $arg, $limit, $offset);
+  }
+  
+  public function search_by_birth_date($bd, $limit = null, $offset = 0) {
+    // format date from yyyy-mm-dd to (yyy)y-(m)m-(d)d
+    list($year, $month, $day) = preg_split('/[\/.-]/', $bd);
+    if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
+    if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
+    if ( intval($year) == 0 ) $year = '0';
+
+    $select = $this->_user()->membership()->getMembersObjectSelect()
+    ->join(array('fields' => 'engine4_user_fields_values'),
+      '',
+      array())
+    ->where('engine4_users.user_id = fields.item_id') // join condition
+    ->where('search = ?', 1) // searchable users only
+    ->where('fields.field_id = 6') // has birthdate field
+    ->where("fields.value = '".$year."-".$month."-".$day."'") // birthdate value
+    ->order("displayname");
+
+    if ($limit !== null) $select->limit($limit, $offset);
+
+    //var_dump((string) $select); // to see sql query
+    return $this->_collect_users($select->getTable()->fetchAll($select));
   }
   
   
