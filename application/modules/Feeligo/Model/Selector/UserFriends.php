@@ -114,7 +114,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
     ->where('engine4_users.user_id = fields.item_id') // join condition
     ->where('search = ?', 1) // searchable users only
     ->where('fields.field_id = 6') // has birthdate field
-    ->where("fields.value = '".$year."-".$month."-".$day."'") // birthdate value
+    ->where("fields.value LIKE ?","%-".$month."-".$day) // birthdate value
     ->order("displayname");
 
     if ($limit !== null) $select->limit($limit, $offset);
