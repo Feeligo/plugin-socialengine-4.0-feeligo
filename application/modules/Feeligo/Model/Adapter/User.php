@@ -102,5 +102,36 @@ class Feeligo_Model_Adapter_User implements FeeligoUserAdapter {
   public function friends_selector() {
     return new Feeligo_Model_Selector_UserFriends($this);
   }
-  
+
+  /**
+   * returns the birth date of this user as yyyy-mm-dd
+   */
+  public function birth_date() {
+    $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAlias($this->user());
+    if( is_array($aliasValues) ) {
+      if( !empty($aliasValues['birthdate']) ) {
+        list($year, $month, $day) = preg_split('/[\/.-]/', $aliasValues['birthdate']);
+        // format day and month
+        if ( intval($day) > 0 && intval($day) < 31 ) {
+          if ( intval($day) < 10 ) {
+            $day = '0' . $day;
+          }
+        }
+        else return '';
+
+        if ( intval($month) > 0 && intval($month) < 12 ) {
+          if ( intval($month) < 10 ) {
+            $month = '0' . $month;
+          }
+        }
+        else  return '';
+
+        if ( intval($year) == 0) $year = '0000';
+
+        return $year . '-' . $month . '-' . $day;
+      }
+    }
+    return '';
+  }
+
 }
