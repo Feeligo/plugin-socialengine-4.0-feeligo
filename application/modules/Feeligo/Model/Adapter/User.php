@@ -102,5 +102,14 @@ class Feeligo_Model_Adapter_User implements FeeligoUserAdapter {
   public function friends_selector() {
     return new Feeligo_Model_Selector_UserFriends($this);
   }
-  
+
+  /**
+   * the user's number of friends
+   *
+   * @return integer
+   */
+  public function friends_count() {
+    return $this->user()->member_count;
+  }
+
 }
