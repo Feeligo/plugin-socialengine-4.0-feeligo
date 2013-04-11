@@ -16,6 +16,14 @@ return array(
     'category' => 'Feeligo',
     'type' => 'widget',
     'name' => 'feeligo.giftbar',
-   
+
+  ),
+  array(
+    'title' => 'Feeligo Status Box',
+    'description' => 'Add to your Member Profile Page to show the Status Box.',
+    'category' => 'Feeligo',
+    'type' => 'widget',
+    'name' => 'feeligo.statusbox',
+
   ),
 ) ?>

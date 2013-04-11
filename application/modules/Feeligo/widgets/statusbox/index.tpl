@@ -1,0 +1,1 @@
+<div id='flg_status_box_container'></div>
