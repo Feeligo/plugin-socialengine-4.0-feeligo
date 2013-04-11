@@ -4,8 +4,8 @@
  * @category   Application_Extensions
  * @package    Feeligo
  * @copyright  Copyright 2012 Feeligo
- * @license    
- * @version    
+ * @license
+ * @version
  * @author     Davide Bonapersona <tech@feeligo.com>
  */
 
@@ -17,7 +17,7 @@
 --
 
 DROP TABLE IF EXISTS `engine4_feeligo_gifts`;
-CREATE TABLE IF NOT EXISTS `engine4_feeligo_gifts` (
+CREATE TABLE `engine4_feeligo_gifts` (
   `gift_id` int(11) NOT NULL auto_increment,
   `name` varchar(128) default NULL,
   `message` text default NULL,
