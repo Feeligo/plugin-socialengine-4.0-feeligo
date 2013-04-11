@@ -5,7 +5,7 @@
  * @category   Feeligo
  * @package    Feeligo_Api
  * @copyright  Copyright 2012 Feeligo
- * @license    
+ * @license
  * @author     Davide Bonapersona <tech@feeligo.com>
  */
 
@@ -13,7 +13,7 @@
  * @category   Feeligo
  * @package    Feeligo_Model_Adapter_User
  * @copyright  Copyright 2012 Feeligo
- * @license    
+ * @license
  */
 
 /**
@@ -23,10 +23,10 @@
  * database and pass them as Adapters to the Feeligo API.
  */
 require_once(str_replace('//','/',dirname(__FILE__).'/').'../../sdk/interfaces/users_selector.php');
- 
- 
+
+
 class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
- 
+
   /**
    * Constructors
    * accepts optional $table and $select arguments to provide a scope for user selection
@@ -40,7 +40,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
 
     $this->_api = Engine_Api::_()->getItemApi('user'); // User_Api_Core
   }
-  
+
   /**
    * Accessor for the table object
    *
@@ -49,7 +49,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
   public function table() {
     return $this->_table;
   }
-  
+
   /**
    * Accessor for the select object
    *
@@ -58,7 +58,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
   public function select() {
     return $this->_select;
   }
-  
+
   /**
    * returns an array containing all the Users
    *
@@ -73,7 +73,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     // retrieve data
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
-  
+
   /**
    * finds a specific User by its id
    *
@@ -91,7 +91,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     if ($throw) throw new FeeligoNotFoundException('user', 'could not find '.'user'.' with id='.$id);
     return null;
   }
-  
+
   /**
    * finds a list of Users by their id's
    *
@@ -101,7 +101,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
   public function find_all($ids) {
     return $this->_collect_users($this->_api->getUserMulti($ids));
   }
- 
+
   /**
    * returns an array containing all the Users whose name matches the query
    *
@@ -109,7 +109,7 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
    * @param int $limit argument for the SQL LIMIT clause
    * @param int $offset argument for the SQL OFFSET clause
    * @return FeeligoUserAdapter[] array
-   */ 
+   */
   public function search($query, $limit = null, $offset = 0) {
     $this->search_by_name($query, $limit, $offset);
   }
@@ -124,22 +124,20 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     // retrieve data
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
-  
+
   public function search_by_birth_date($bd, $limit = null, $offset = 0) {
-    // format date from yyyy-mm-dd to (yyy)y-(m)m-(d)d
-    list($year, $month, $day) = preg_split('/[\/.-]/', $bd);
+    // format date from mm-dd to (m)m-(d)d
+    list($month, $day) = preg_split('/[\/.-]/', $bd);
     if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
     if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
-    if ( intval($year) == 0 ) $year = '0';
 
     // select from engine4_users to get users
     $select = $this->select()->distinct();
-    
+
     // join with engine4_user_fields_values to get birthdate
     $select->join(array('fields' => 'engine4_user_fields_values'),
-      //'`'.$this->table()->info('name').'`.`user_id` = fields.item_id',
-      '',
-      array());
+                  '',
+                  array());
 
     $select->where('engine4_users.user_id = fields.item_id') // join condition
     ->where('search = ?', 1) // searchable users only
@@ -150,10 +148,9 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     // pagination
     if ($limit !== null) $select->limit($limit, $offset);
     // retrieve data
-    //var_dump((string) $select); // to see sql query
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
-  
+
   /**
    * helper method to wrap each element of a list of User_Model_User
    * in a Feeligo_Model_Adapter_User adapter
@@ -170,5 +167,5 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     }
     return $adapters;
   }
- 
+
 }

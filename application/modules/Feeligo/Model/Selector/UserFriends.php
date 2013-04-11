@@ -5,7 +5,7 @@
  * @category   Feeligo
  * @package    Feeligo_Api
  * @copyright  Copyright 2012 Feeligo
- * @license    
+ * @license
  * @author     Davide Bonapersona <tech@feeligo.com>
  */
 
@@ -13,9 +13,9 @@
  * @category   Feeligo
  * @package    Feeligo_Model_Adapter_User
  * @copyright  Copyright 2012 Feeligo
- * @license    
+ * @license
  */
- 
+
 /**
 * Feeligo_Model_Selector_UserFriends
 *
@@ -25,9 +25,9 @@
 
 require_once(str_replace('//','/',dirname(__FILE__).'/').'../../sdk/interfaces/users_selector.php');
 
- 
+
 class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
- 
+
   /**
    * Constructor
    * expects an instance of Feeligo_Model_Adapter_User containing the reference user
@@ -41,8 +41,8 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
     parent::__construct($table, $select);
     $this->_adapter_user = $adapter_user;
   }
-  
-  /** 
+
+  /**
    * Accessor for the reference user (the adapted SocialEngine user, NOT the adapter!)
    *
    * @return Feeligo_Model_Adapter_User
@@ -50,7 +50,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
   protected function _user() {
     return $this->_adapter_user->user();
   }
-  
+
   /**
    * returns an array containing all the user's friends
    *
@@ -61,7 +61,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
   public function all($limit = null, $offset = 0) {
     return $this->_collect_users($this->_user()->membership()->getMembers($this->_user()));
   }
-  
+
   /**
    * finds a specific friend by its id
    *
@@ -71,7 +71,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
   public function find($id, $throw = true) {
     return $this->_all_where('`'.$this->table()->info('name').'`.`user_id` = ?', $id)->find($id, $throw);
   }
-  
+
   /**
    * finds a list of friends by their id's
    *
@@ -81,7 +81,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
   public function find_all($ids) {
     return $this->_all_where('`'.$this->table()->info('name').'`.`user_id` IN (?)', $ids);
   }
- 
+
   /**
    * returns an array containing all the friends whose name matches the query
    *
@@ -89,7 +89,7 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
    * @param int $limit argument for the SQL LIMIT clause
    * @param int $offset argument for the SQL OFFSET clause
    * @return Feeligo_Model_Adapter_User[] array
-   */  
+   */
   public function search($query, $limit = null, $offset = 0) {
     $this->search_by_name($query, $limit, $offset);
   }
@@ -99,13 +99,12 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
     $arg = '%'. $query .'%';
     return $this->_all_where($where, $arg, $limit, $offset);
   }
-  
+
   public function search_by_birth_date($bd, $limit = null, $offset = 0) {
-    // format date from yyyy-mm-dd to (yyy)y-(m)m-(d)d
-    list($year, $month, $day) = preg_split('/[\/.-]/', $bd);
+    // format date from mm-dd to (m)m-(d)d
+    list($month, $day) = preg_split('/[\/.-]/', $bd);
     if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
     if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
-    if ( intval($year) == 0 ) $year = '0';
 
     $select = $this->_user()->membership()->getMembersObjectSelect()
     ->join(array('fields' => 'engine4_user_fields_values'),
@@ -119,11 +118,10 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
 
     if ($limit !== null) $select->limit($limit, $offset);
 
-    //var_dump((string) $select); // to see sql query
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
-  
-  
+
+
   /**
    * Helper method to pass a SQL WHERE, LIMIT and OFFSET to query friends of the reference user
    *
@@ -137,5 +135,5 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
     if ($limit !== null) $select->limit($limit, $offset);
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
-  
+
 }
