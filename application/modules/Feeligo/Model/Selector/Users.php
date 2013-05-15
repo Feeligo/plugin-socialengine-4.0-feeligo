@@ -101,19 +101,16 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
   public function find_all($ids) {
     return $this->_collect_users($this->_api->getUserMulti($ids));
   }
-
+  
   /**
-   * returns an array containing all the Users whose name matches the query
+   * returns an array containing all the Users whose name matches the $query
+   * argument
    *
    * @param string $query the search query, argument to a SQL LIKE '%$query%' clause
    * @param int $limit argument for the SQL LIMIT clause
    * @param int $offset argument for the SQL OFFSET clause
    * @return FeeligoUserAdapter[] array
    */
-  public function search($query, $limit = null, $offset = 0) {
-    $this->search_by_name($query, $limit, $offset);
-  }
-
   public function search_by_name($query, $limit = null, $offset = 0) {
     // Searchable users only
     $select = $this->select()->where('search = ?', 1);
@@ -125,26 +122,31 @@ class Feeligo_Model_Selector_Users implements FeeligoUsersSelector {
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
 
+  /**
+   * returns an array containing all the Users whose birthday matches the MM-DD
+   * $bd argument
+   *
+   * @param string $bd the birth date as a 'MM-DD' formatted string
+   * @param int $limit argument for the SQL LIMIT clause
+   * @param int $offset argument for the SQL OFFSET clause
+   * @return FeeligoUserAdapter[] array
+   */
   public function search_by_birth_date($bd, $limit = null, $offset = 0) {
-    // format date from mm-dd to (m)m-(d)d
+    // split $bd, remove leading zeroes from month and day: '03-01' -> '3', '1'
     list($month, $day) = preg_split('/[\/.-]/', $bd);
     if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
     if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
-
     // select from engine4_users to get users
     $select = $this->select()->distinct();
-
     // join with engine4_user_fields_values to get birthdate
     $select->join(array('fields' => 'engine4_user_fields_values'),
                   '',
                   array());
-
     $select->where('engine4_users.user_id = fields.item_id') // join condition
     ->where('search = ?', 1) // searchable users only
     ->where('fields.field_id = 6') // has birthdate field
     ->where("fields.value LIKE ?","%-".$month."-".$day) // birthdate value
     ->order("displayname");
-
     // pagination
     if ($limit !== null) $select->limit($limit, $offset);
     // retrieve data
