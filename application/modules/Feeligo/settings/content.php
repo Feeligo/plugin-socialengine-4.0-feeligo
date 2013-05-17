@@ -11,8 +11,8 @@
  */
 return array(
   array(
-    'title' => 'Feeligo Gift Bar',
-    'description' => 'Add to your Global Footer to show the Gift Bar.',
+    'title' => 'Feeligo GiftBar',
+    'description' => 'Add to your Global Footer to display the GiftBar.',
     'category' => 'Feeligo',
     'type' => 'widget',
     'name' => 'feeligo.giftbar',

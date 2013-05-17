@@ -104,34 +104,24 @@ class Feeligo_Model_Adapter_User implements FeeligoUserAdapter {
   }
 
   /**
-   * returns the birth date of this user as yyyy-mm-dd
+   * returns the birth date of this user as an Array containing three integers
+   * indexed by 'year', 'month' and 'day'.
+   *
+   * @return array
    */
   public function birth_date() {
     $aliasValues = Engine_Api::_()->fields()->getFieldsValuesByAlias($this->user());
+    $bd = array('year' => null, 'month' => null, 'day' => null );
     if( is_array($aliasValues) ) {
       if( !empty($aliasValues['birthdate']) ) {
-        list($year, $month, $day) = preg_split('/[\/.-]/', $aliasValues['birthdate']);
+        list($y, $m, $d) = preg_split('/[\/.-]/', $aliasValues['birthdate']);
         // format day and month
-        if ( intval($day) > 0 && intval($day) < 31 ) {
-          if ( intval($day) < 10 ) {
-            $day = '0' . $day;
-          }
-        }
-        else return '';
-
-        if ( intval($month) > 0 && intval($month) < 12 ) {
-          if ( intval($month) < 10 ) {
-            $month = '0' . $month;
-          }
-        }
-        else  return '';
-
-        if ( intval($year) == 0) $year = '0000';
-
-        return $year . '-' . $month . '-' . $day;
+        $bd['year'] = ($y = intval($y)) > 0 ? $y : null;
+        $bd['month'] = ($m = intval($m)) > 0 && $m <= 12 ? $m : null;
+        $bd['day'] = ($d = intval($d)) > 0 && $d <= 31 ? $d : null;
       }
     }
-    return '';
+    return $bd;
   }
 
 }

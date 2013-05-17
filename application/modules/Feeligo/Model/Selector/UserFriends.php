@@ -90,34 +90,47 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
    * @param int $offset argument for the SQL OFFSET clause
    * @return Feeligo_Model_Adapter_User[] array
    */
-  public function search($query, $limit = null, $offset = 0) {
-    $this->search_by_name($query, $limit, $offset);
-  }
-
   public function search_by_name($query, $limit = null, $offset = 0) {
     $where = '`'.$this->table()->info('name').'`.`displayname` LIKE ?';
     $arg = '%'. $query .'%';
     return $this->_all_where($where, $arg, $limit, $offset);
   }
 
-  public function search_by_birth_date($bd, $limit = null, $offset = 0) {
-    // format date from mm-dd to (m)m-(d)d
-    list($month, $day) = preg_split('/[\/.-]/', $bd);
-    if ( intval($day) > 0 && intval($day) < 10 ) $day = substr($day, 1, 1);
-    if ( intval($month) > 0 && intval($month) < 10 ) $month = substr($month, 1, 1);
-
+  /**
+   * returns an array containing all the friends whose birth date matches the
+   * arguments.
+   * The $year number can be null, which should return all users whose birthday
+   * is on the specified $day and $month, regardless of their birth year.
+   * Assumes $year, $month, $date is a valid date.
+   *
+   * @param int $day the day number, from 1 to 31
+   * @param int $month the month number, from 1 = January to 12 = December
+   * @param int $year the year number (as a 4-digit integer), such as 2013
+   * @param int $limit argument for the SQL LIMIT clause
+   * @param int $offset argument for the SQL OFFSET clause
+   * @return FeeligoUserAdapter[] array
+   */
+  public function search_by_birth_date($day, $month, $year = null, $limit = null, $offset = 0) {
+    // join with engine4_user_fields_values to get birthdate
     $select = $this->_user()->membership()->getMembersObjectSelect()
-    ->join(array('fields' => 'engine4_user_fields_values'),
-      '',
-      array())
-    ->where('engine4_users.user_id = fields.item_id') // join condition
-    ->where('search = ?', 1) // searchable users only
-    ->where('fields.field_id = 6') // has birthdate field
-    ->where("fields.value LIKE ?","%-".$month."-".$day) // birthdate value
-    ->order("displayname");
-
+      ->join(array('fields' => 'engine4_user_fields_values'),
+        '',
+        array())
+      ->where('engine4_users.user_id = fields.item_id') // join
+      ->where('search = ?', 1) // searchable users only
+      ->where('fields.field_id = 6') // has birthdate field
+      ->order("displayname");
+    if ($year !== null) {
+      // if a $year is provided we want an exact match
+      // NOTE: SE4 stores this date without leading zeroes for 1-digit!
+      $select->where("fields.value = ?", $year."-".$month."-".$day);
+    } else {
+      // otherwise, we match $month and $day only
+      $select->where("fields.value LIKE ?", "%-".$month."-".$day);
+    }
+    // pagination
     if ($limit !== null) $select->limit($limit, $offset);
-
+    // retrieve data
     return $this->_collect_users($select->getTable()->fetchAll($select));
   }
 
