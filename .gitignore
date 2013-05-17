@@ -1,5 +1,42 @@
+# Let's ignore all SocialEngine files except for the Feeligo module files
+#
+
+
+# ignore everything
 *
+
+# except these files
 !.gitignore
 !README.md
+
+# do not ignore the application directory...
+!application
+# ... but do ignore everything inside it
+application/*
+
+# do not ignore the application/languages directory...
+!application/languages
+# ... but do ignore everything inside it ...
+application/languages/*
+# ... except for the feeligo.csv file in a subdirectory
 !application/languages/*/feeligo.csv
+
+# do not ignore the application/modules directory...
+!application/modules
+# ... but do ignore everything inside it ...
+application/modules/*
+# ... except the Feeligo subdirectory
 !application/modules/Feeligo
+
+# We need to explicitly allow many subdirectories of Feeligo
+# (see http://stackoverflow.com/a/5250314)
+!application/modules/Feeligo/*
+!application/modules/Feeligo/*/*
+!application/modules/Feeligo/*/*/*
+!application/modules/Feeligo/*/*/*/*
+!application/modules/Feeligo/*/*/*/*/*
+!application/modules/Feeligo/*/*/*/*/*/*
+
+
+# Ignore these nasty files wherever they are
+.DS_Store
