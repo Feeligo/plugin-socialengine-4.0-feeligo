@@ -1,14 +1,12 @@
 /**
- * SocialEngine
+ * Feeligo
  *
- * @category   Application_Extensions
- * @package    Feeligo
+ * @category   Feeligo
+ * @package    Feeligo_Api
  * @copyright  Copyright 2012 Feeligo
  * @license    
- * @version    
  * @author     Davide Bonapersona <tech@feeligo.com>
  */
-
 
 -- --------------------------------------------------------
 

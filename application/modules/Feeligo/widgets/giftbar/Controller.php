@@ -1,11 +1,15 @@
 <?php
 
 /**
+ * Feeligo
+ *
  * @category   Application_Widget
- * @package    FeeligoGiftbar
+ * @package    Feeligo_Api
  * @copyright  Copyright 2012 Feeligo
- * @author     Davide Bonapersona
+ * @license    
+ * @author     Davide Bonapersona <tech@feeligo.com>
  */
+
 class Feeligo_Widget_GiftbarController extends Engine_Content_Widget_Abstract
 {
   public function indexAction()

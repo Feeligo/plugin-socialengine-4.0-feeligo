@@ -1,14 +1,14 @@
 <?php
 /**
- * SocialEngine
+ * Feeligo
  *
- * @category   Application_Core
- * @package    User
- * @copyright  Copyright 2006-2010 Webligo Developments
- * @license    http://www.socialengine.net/license/
- * @version    $Id: content.php 8595 2011-03-12 02:12:54Z john $
- * @author     John
+ * @category   Feeligo
+ * @package    Feeligo_Api
+ * @copyright  Copyright 2012 Feeligo
+ * @license    
+ * @author     Davide Bonapersona <tech@feeligo.com>
  */
+
 return array(
   array(
     'title' => 'Feeligo GiftBar',
@@ -16,6 +16,14 @@ return array(
     'category' => 'Feeligo',
     'type' => 'widget',
     'name' => 'feeligo.giftbar',
-   
+
+  ),
+  array(
+    'title' => 'Feeligo Status Box',
+    'description' => 'Add to your Member Profile Page to show the Status Box.',
+    'category' => 'Feeligo',
+    'type' => 'widget',
+    'name' => 'feeligo.statusbox',
+
   ),
 ) ?>

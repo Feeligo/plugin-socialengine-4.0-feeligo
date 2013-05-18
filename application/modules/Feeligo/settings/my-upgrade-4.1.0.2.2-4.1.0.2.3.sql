@@ -1,11 +1,10 @@
 /**
- * SocialEngine
+ * Feeligo
  *
- * @category   Application_Extensions
- * @package    Feeligo
+ * @category   Feeligo
+ * @package    Feeligo_Api
  * @copyright  Copyright 2012 Feeligo
  * @license    
- * @version    
  * @author     Davide Bonapersona <tech@feeligo.com>
  */
 
@@ -15,6 +14,7 @@
 --
 -- Table structure for table `engine4_feeligo_gifts`
 --
+
 CREATE TABLE `engine4_feeligo_gifts` (
   `gift_id` int(11) NOT NULL auto_increment,
   `name` varchar(128) default NULL,
