@@ -77,6 +77,15 @@ class Feeligo_Model_Adapter_User implements FeeligoUserAdapter {
   }
 
   /**
+   * the user's email
+   *
+   * @return string
+   */
+  public function email() {
+    return $this->user()->email;
+  }
+
+  /**
    * the URL of the user's profile page (full URL, not only the path)
    *
    * @return string
