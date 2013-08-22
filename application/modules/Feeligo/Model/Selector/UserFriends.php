@@ -69,7 +69,9 @@ class Feeligo_Model_Selector_UserFriends extends Feeligo_Model_Selector_Users im
    * @return Feeligo_Model_Adapter_User
    */
   public function find($id, $throw = true) {
-    return $this->_all_where('`'.$this->table()->info('name').'`.`user_id` = ?', $id)->find($id, $throw);
+    return $this->_all_where('`'.$this->table()->info('name').'`.`user_id` = ?', $id);
+    if ($throw) throw new FeeligoNotFoundException('user', 'could not find '.'user'.' with id='.$id);
+    return null;
   }
 
   /**
