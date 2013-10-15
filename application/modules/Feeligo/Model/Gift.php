@@ -33,9 +33,21 @@ class Feeligo_Model_Gift extends Core_Model_Item_Abstract
   }
   
   public function getDescription() {
-    $message = $this->message !== null ? trim($this->message) : null;
+    $message = ($m = $this->_message()) !== null ? $m : null;
     if ($message === null || strlen($message) == 0) return null;
-    return "&laquo;&nbsp;".htmlentities(utf8_decode($message))."&nbsp;&raquo;";
+    return "&laquo;&nbsp;".$message."&nbsp;&raquo;";
+  }
+
+  protected function _message() {
+    if (($message = $this->message) !== null) {
+      if (mb_detect_encoding($message, 'utf-8')) {
+        $message = trim($message);
+      } else {
+        // no UTF-8
+        $message = trim(utf8_encode($message));
+      }
+      return $message;
+    }
   }
 
 }
